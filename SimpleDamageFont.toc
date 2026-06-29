@@ -1,6 +1,7 @@
 ## Interface: 120007, 120005
 ## Title: Simple Damage Font by |cFF69CCF0Fugazi|r
 ## Notes: Changes the floating combat text font
+## IconTexture: Interface\Icons\Ability_MeleeDamage.tga
 ## Version: 1.0.0
 ## SavedVariables: SimpleDamageFontDB
 

@@ -92,5 +92,9 @@ Settings.RegisterAddOnCategory(settingsCategory)
 -- Slash command
 SLASH_SIMPLEDAMAGEFONT1 = "/sdf"
 SlashCmdList["SIMPLEDAMAGEFONT"] = function(msg)
-    Settings.OpenToCategory(settingsCategory.ID)  
+    if InCombatLockdown() then
+        print("|cFF00FF00SimpleDamageFont:|r Cannot open settings while in combat.")
+        return
+    end
+    Settings.OpenToCategory(settingsCategory.ID)
 end

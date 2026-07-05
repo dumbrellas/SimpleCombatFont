@@ -1,10 +1,7 @@
 local addonName, ns = ...
 local LSM = LibStub("LibSharedMedia-3.0")
 
-
 ns.DEFAULT_FONT = DAMAGE_TEXT_FONT
-ns.DEBUG_FONT = "Interface\\AddOns\\SimpleDamageFont\\Fonts\\Expressway.ttf"
-
 
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("ADDON_LOADED")

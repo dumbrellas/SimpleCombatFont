@@ -11,7 +11,7 @@ __It only changes the font__.
 <small>Coming soon: use any custom font by placing a font file in the addon's `Fonts` folder</small>
 
 ## Usage
-1. Enter `/sdf` or open the Simple Damage Font panel in Game Menu > Options > Addons
+1. Use `/sdf` or open the Simple Damage Font panel in Game Menu > Options > Addons
 
 2. Select a font from the drop-down list and click **Apply**
 

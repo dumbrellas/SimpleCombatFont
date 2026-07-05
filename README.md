@@ -8,7 +8,7 @@ Allows the use of built-in Blizzard fonts or available fonts from LibSharedMedia
 This does **not** change the behaviour of the floating combat text.  
 __It only changes the font__.  
 
-<small>Manual font selection coming soon...</small>
+<small>Dedicated custom font selection by manual path coming soon...</small>
 
 ## Usage
 1. Enter `/sdf` or open the Simple Damage Font panel in Game Menu > Options > Addons

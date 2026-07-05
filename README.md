@@ -2,12 +2,13 @@
 ![Readme](./readme.png)
 
 Swaps your floating comabt text to the font of your choice.  
-Uses availble fonts from LibSharedMedia (registered by other addons).
 
-Manual font selection coming soon...
+Allows the use of built-in Blizzard fonts or available fonts from LibSharedMedia (registered by other addons).
 
 This does **not** change the behaviour of the floating combat text.  
-__It only changes the font__.
+__It only changes the font__.  
+
+<small>Manual font selection coming soon...</small>
 
 ## Usage
 1. Enter `/sdf` or open the Simple Damage Font panel in Game Menu > Options > Addons

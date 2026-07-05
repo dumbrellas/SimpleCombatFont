@@ -14,7 +14,7 @@ frame:SetScript("OnEvent", function(self, event, loadedAddon)
         if loadedAddon == addonName then
             SimpleDamageFontDB = SimpleDamageFontDB or {}
             ns.db = SimpleDamageFontDB
-        if ns.db.customFontPath == nil then
+        if not ns.db.customFontPath then
             print "|cFF00FF00SimpleDamageFont:|r Database was nil, set to default font." -- Debug message, remove later
             DAMAGE_TEXT_FONT = ns.DEFAULT_FONT
         elseif C_UIFileAsset.IsLooseFile(ns.db.customFontPath) then

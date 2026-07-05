@@ -22,7 +22,7 @@ Your selection will be saved and applied each login. You only need to log out an
 Due to the way WoW handles 3D font changes, you **must** log out to the character select screen, and log back in order to apply font changes.  
 
 ## Planned
-- [x] Select from available LibSharedMedia fonts
+- [x] ~~Select from available LibSharedMedia fonts~~
 - [ ] Use custom font via manual path
 
 That's it, pretty simple

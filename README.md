@@ -24,4 +24,5 @@ Due to the way WoW handles 3D font changes, you **must** log out to the characte
 ## Planned
 - [x] Select from available LibSharedMedia fonts
 - [ ] Use custom font via manual path
-- That's it, pretty simple
+
+That's it, pretty simple

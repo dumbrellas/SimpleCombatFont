@@ -13,7 +13,7 @@ frame:SetScript("OnEvent", function(self, event, loadedAddon)
             ns.db = SimpleDamageFontDB
         if not ns.db.customFontPath then
             DAMAGE_TEXT_FONT = ns.DEFAULT_FONT
-        elseif C_UIFileAsset.IsLooseFile(ns.db.customFontPath) then
+        elseif C_UIFileAsset.IsLooseFile(ns.db.customFontPath) or C_UIFileAsset.IsKnownFile(ns.db.customFontPath) then
             DAMAGE_TEXT_FONT = ns.db.customFontPath
         else
             print("|cFF00FF00SimpleDamageFont:|r |cFFFFD100" .. ns.db.customFontName .. "|r was not found. Please select a different font in SDF settings.")

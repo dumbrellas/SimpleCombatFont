@@ -1,6 +1,7 @@
 local addonName, ns = ...
 local LSM = LibStub("LibSharedMedia-3.0")
 local settingsPanel = CreateFrame("Frame", "SimpleDamageFontSettingsPanel", UIParent)
+local addonVersion = C_AddOns.GetAddOnMetadata(addonName, "Version")
 
 -- Preview fonts table and helper function to use in dropdown and default dropdown value
 local previewFonts = {}
@@ -24,7 +25,7 @@ title:SetText("Simple Damage Font")
 -- Subtitle
 local subtitle = settingsPanel:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 subtitle:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -8)
-subtitle:SetText("Author: Fugazi\nVersion: 1.0.0\n\nCustomize your floating damage font.")
+subtitle:SetText("Author: Fugazi\nVersion: " .. addonVersion .. "\n\nCustomize your floating damage font.")
 subtitle:SetJustifyH("LEFT")
 
 -- Dropdown menu

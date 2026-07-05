@@ -1,9 +1,20 @@
 local addonName, ns = ...
 local LSM = LibStub("LibSharedMedia-3.0")
+local settingsPanel = CreateFrame("Frame", "SimpleDamageFontSettingsPanel", UIParent)
 
+-- Preview fonts table and helper function to use in dropdown and default dropdown value
 local previewFonts = {}
 
-local settingsPanel = CreateFrame("Frame", "SimpleDamageFontSettingsPanel", UIParent)
+local function GetOrCreatePreviewFont(fontName)
+    local previewFont = previewFonts[fontName]
+    if not previewFont then
+        previewFont = CreateFont("SimpleDamageFontPreview_" .. fontName)
+        previewFont:SetFont(LSM:Fetch("font", fontName, true) or ns.DEFAULT_FONT, 12, "")
+        previewFonts[fontName] = previewFont
+    end
+    return previewFont
+end
+
 
 -- Title
 local title = settingsPanel:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
@@ -26,14 +37,7 @@ settingsPanel:SetScript("OnShow", function()
     if ns.db.customFontName then
         UIDropDownMenu_SetSelectedValue(fontDropdown, ns.db.customFontName)
         UIDropDownMenu_SetText(fontDropdown, ns.db.customFontName)
-
-        local previewFont = previewFonts[ns.db.customFontName]
-        if not previewFont then
-            previewFont = CreateFont("SimpleDamageFontPreview_" .. ns.db.customFontName)
-            previewFont:SetFont(LSM:Fetch("font", ns.db.customFontName, true) or ns.DEFAULT_FONT, 12, "")
-            previewFonts[ns.db.customFontName] = previewFont
-        end
-        fontDropdown.Text:SetFontObject(previewFont)
+        fontDropdown.Text:SetFontObject(GetOrCreatePreviewFont(ns.db.customFontName))
     else
         UIDropDownMenu_SetText(fontDropdown, "Select a font")
     end
@@ -44,18 +48,11 @@ UIDropDownMenu_Initialize(fontDropdown, function(self, level)
         local info = UIDropDownMenu_CreateInfo()
         info.text = fontName
         info.value = fontName
-
-        local previewFont = previewFonts[fontName]
-        if not previewFont then
-            previewFont = CreateFont("SimpleDamageFontPreview_" .. fontName)
-            previewFont:SetFont(LSM:Fetch("font", fontName, true), 12, "")
-            previewFonts[fontName] = previewFont
-        end
-        info.fontObject = previewFont
+        info.fontObject = GetOrCreatePreviewFont(fontName)
 
         info.func = function(self)
             UIDropDownMenu_SetSelectedValue(fontDropdown, self.value)
-            fontDropdown.Text:SetFontObject(previewFonts[self.value])
+            fontDropdown.Text:SetFontObject(GetOrCreatePreviewFont(self.value))
         end
 
         UIDropDownMenu_AddButton(info)

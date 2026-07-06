@@ -25,7 +25,7 @@ Extract SimpleCombatFont folder to `Interface\Addons\` folder
 ![Settings UI](./readme-settingsui.png)
 
 ## Note
-Your selection will be saved and applied each login. You only need to log out and log in when changing the font in the settings panel.
+Your selection will be saved and applied each login (account-wide). You only need to log out and log in when changing the font in the settings panel.
 
 Due to the way WoW handles 3D font changes, you **must** log out to the character select screen, and log back in to apply this font change.  
 

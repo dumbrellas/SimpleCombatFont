@@ -20,6 +20,8 @@ Extract SimpleCombatFont folder to `Interface\Addons\` folder
 
 3. Log out to character select screen and log back in  
 
+![Settings UI](./readme-settingsui.png)
+
 ## Note
 Your selection will be saved and applied each login. You only need to log out and log in when changing the font in the settings panel.
 

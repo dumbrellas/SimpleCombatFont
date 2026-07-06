@@ -1,14 +1,16 @@
 # Simple Combat Font
 ![Readme](./readme.png)
-
+  
 Swaps your floating combat text to the font of your choice.  
 
-Allows the use of built-in Blizzard fonts or available fonts from LibSharedMedia (registered by other addons).
+This addon does **not** change the _behaviour_ of the floating combat text.  
+__It only changes the font__.
 
-This does **not** change the behaviour of the floating combat text.  
-__It only changes the font__.  
+Currently supports:
+- Blizzard default fonts
+- LibSharedMedia fonts (fonts registered from other addons)
 
-<small>Coming soon: use any custom font by placing a font file in the addon's `Fonts` folder</small>
+<small>Coming soon: use your own custom font</small>
 
 ## Installation
 Extract SimpleCombatFont folder to `Interface\Addons\` folder

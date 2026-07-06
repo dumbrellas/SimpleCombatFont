@@ -10,6 +10,9 @@ __It only changes the font__.
 
 <small>Coming soon: use any custom font by placing a font file in the addon's `Fonts` folder</small>
 
+## Installation
+Extract SimpleCombatFont folder to `Interface\Addons\` folder
+
 ## Usage
 1. Use `/scf` or open the Simple Combat Font panel in Game Menu > Options > Addons
 

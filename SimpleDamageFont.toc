@@ -1,13 +1,13 @@
 ## Interface: 120007, 120005
-## Title: Simple Damage Font by |cFF69CCF0Fugazi|r
+## Title: Simple Comabt Font by |cFF69CCF0Fugazi|r
 ## Notes: Changes the floating combat text font
 ## IconTexture: Interface\Icons\Ability_MeleeDamage.tga
 ## Version: 1.0.0
-## SavedVariables: SimpleDamageFontDB
+## SavedVariables: SimpleCombatFontDB
 
 libs\LibStub\LibStub.lua
 libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
 libs\LibSharedMedia-3.0\LibSharedMedia-3.0.lua
 
-SimpleDamageFont.lua
-SimpleDamageFont-Options.lua
+SimpleComabtFont.lua
+SimpleCombatFont-Options.lua

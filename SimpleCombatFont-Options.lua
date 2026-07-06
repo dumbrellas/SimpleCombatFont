@@ -1,6 +1,6 @@
 local addonName, ns = ...
 local LSM = LibStub("LibSharedMedia-3.0")
-local settingsPanel = CreateFrame("Frame", "SimpleDamageFontSettingsPanel", UIParent)
+local settingsPanel = CreateFrame("Frame", "SimpleCombatFontSettingsPanel", UIParent)
 local addonVersion = C_AddOns.GetAddOnMetadata(addonName, "Version")
 
 -- Preview fonts table and helper function to use in dropdown and default dropdown value
@@ -9,7 +9,7 @@ local previewFonts = {}
 local function GetOrCreatePreviewFont(fontName)
     local previewFont = previewFonts[fontName]
     if not previewFont then
-        previewFont = CreateFont("SimpleDamageFontPreview_" .. fontName)
+        previewFont = CreateFont("SimpleCombatFontPreview_" .. fontName)
         previewFont:SetFont(LSM:Fetch("font", fontName, true) or ns.DEFAULT_FONT, 12, "")
         previewFonts[fontName] = previewFont
     end
@@ -20,16 +20,16 @@ end
 -- Title
 local title = settingsPanel:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
 title:SetPoint("TOPLEFT", 16, -16)
-title:SetText("Simple Damage Font")
+title:SetText("Simple Combat Font")
 
 -- Subtitle
 local subtitle = settingsPanel:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 subtitle:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -8)
-subtitle:SetText("Author: Fugazi\nVersion: " .. addonVersion .. "\n\nCustomize your floating damage font.")
+subtitle:SetText("Author: Fugazi\nVersion: " .. addonVersion .. "\n\nCustomize your floating combat text font.")
 subtitle:SetJustifyH("LEFT")
 
 -- Dropdown menu
-local fontDropdown = CreateFrame("Frame", "SimpleDamageFontDropdown", settingsPanel, "UIDropDownMenuTemplate")
+local fontDropdown = CreateFrame("Frame", "SimpleCombatFontDropdown", settingsPanel, "UIDropDownMenuTemplate")
 fontDropdown:SetPoint("TOPLEFT", subtitle, "BOTTOMLEFT", -16, -16)
 UIDropDownMenu_SetWidth(fontDropdown, 200)
 UIDropDownMenu_JustifyText(fontDropdown, "LEFT")
@@ -61,7 +61,7 @@ UIDropDownMenu_Initialize(fontDropdown, function(self, level)
 end)
 
 -- Apply button
-local applyButton = CreateFrame("Button", "SimpleDamageFontApplyButton", settingsPanel, "UIPanelButtonTemplate")
+local applyButton = CreateFrame("Button", "SimpleCombatFontApplyButton", settingsPanel, "UIPanelButtonTemplate")
 applyButton:SetSize(100, 22)
 applyButton:SetPoint("LEFT", title, "LEFT", 0, 0)
 applyButton:SetPoint("TOP", fontDropdown, "BOTTOM", 0, -8)
@@ -74,7 +74,7 @@ applyButton:SetScript("OnClick", function()
     ns.db.customFontName = selectedFont
     ns.db.customFontPath = LSM:Fetch("font", selectedFont, true) or ns.DEFAULT_FONT
 
-    print("|cFF00FF00SimpleDamageFont:|r |cFFFFD100" .. selectedFont .. "|r saved — log out and back in fully to apply it.")
+    print("|cFF00FF00SimpleCombatFont:|r |cFFFFD100" .. selectedFont .. "|r saved — log out and back in fully to apply it.")
 end)
 
 -- Relog notice
@@ -87,14 +87,14 @@ relogNotice:SetText("After clicking Apply, you must fully log out to the charact
 relogNotice:SetTextColor(1, 0.5, 0, 1)
 
 -- Register category
-local settingsCategory = Settings.RegisterCanvasLayoutCategory(settingsPanel, "Simple Damage Font")
+local settingsCategory = Settings.RegisterCanvasLayoutCategory(settingsPanel, "Simple Combat Font")
 Settings.RegisterAddOnCategory(settingsCategory)
 
 -- Slash command
-SLASH_SIMPLEDAMAGEFONT1 = "/sdf"
-SlashCmdList["SIMPLEDAMAGEFONT"] = function(msg)
+SLASH_SIMPLECOMBATFONT1 = "/scf"
+SlashCmdList["SIMPLECOMBATFONT"] = function(msg)
     if InCombatLockdown() then
-        print("|cFF00FF00SimpleDamageFont:|r Cannot open settings while in combat.")
+        print("|cFF00FF00SimpleCombatFont:|r Cannot open settings while in combat.")
         return
     end
     Settings.OpenToCategory(settingsCategory.ID)

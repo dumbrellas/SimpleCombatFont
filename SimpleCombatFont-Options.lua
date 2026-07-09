@@ -6,15 +6,18 @@ local addonVersion = C_AddOns.GetAddOnMetadata(addonName, "Version")
 -- Preview fonts table and helper function to use in dropdown and default dropdown value
 local previewFonts = {}
 
-local function GetOrCreatePreviewFont(fontName)
-    local previewFont = previewFonts[fontName]
+local function GetOrCreatePreviewFont(fontName, size)
+    size = size or 12
+    local key = (fontName or "Default") .. ":" .. size
+    local previewFont = previewFonts[key]
     if not previewFont then
-        previewFont = CreateFont("SimpleCombatFontPreview_" .. fontName)
-        previewFont:SetFont(LSM:Fetch("font", fontName, true) or ns.DEFAULT_FONT, 12, "")
-        previewFonts[fontName] = previewFont
+        previewFont = CreateFont("SimpleCombatFontPreview_" .. (fontName or "Default") .. "_" .. size)
+        previewFont:SetFont(LSM:Fetch("font", fontName, true) or ns.DEFAULT_FONT, size, "")
+        previewFonts[key] = previewFont
     end
     return previewFont
 end
+
 
 
 -- Title
@@ -85,6 +88,12 @@ relogNotice:SetWidth(500)
 relogNotice:SetJustifyH("LEFT")
 relogNotice:SetText("After clicking Apply, you must fully log out to the character selection screen and log back in for the new font to take effect. \n\nReloading the UI (/reload) is not enough.")
 relogNotice:SetTextColor(1, 0.5, 0, 1)
+
+-- Preview font
+local previewTitle = settingsPanel:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+previewTitle:SetPoint("LEFT", title, "LEFT", 0, 0)
+previewTitle:SetPoint("TOP", relogNotice, "BOTTOM", 0, -16)
+previewTitle:SetText("Preview")
 
 -- Register category
 local settingsCategory = Settings.RegisterCanvasLayoutCategory(settingsPanel, "Simple Combat Font")

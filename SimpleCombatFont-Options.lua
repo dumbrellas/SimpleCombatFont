@@ -3,13 +3,23 @@ local LSM = LibStub("LibSharedMedia-3.0")
 local settingsPanel = CreateFrame("Frame", "SimpleCombatFontSettingsPanel", UIParent)
 local addonVersion = C_AddOns.GetAddOnMetadata(addonName, "Version")
 
--- Preview texts table and update function to be called at OnShow and when a new drop-down value is selected
-local previewTexts = {}
+local previewFonts = {}
+local function GetOrCreatePreviewFont(fontName, size)
+    size = size or 12
+    local key = (fontName or "Default") .. ":" .. size
+    local previewFont = previewFonts[key]
+    if not previewFont then
+        previewFont = CreateFont("SimpleCombatFontPreview_" .. (fontName or "Default") .. "_" .. size)
+        previewFont:SetFont(LSM:Fetch("font", fontName, true) or ns.DEFAULT_FONT, size, "")
+        previewFonts[key] = previewFont
+    end
+    return previewFont
+end
 
+local previewTexts = {}
 local function UpdatePreviewFonts(fontName)
-    local fontPath = LSM:Fetch("font", fontName, true) or ns.DEFAULT_FONT
     for _, previewText in ipairs(previewTexts) do
-        previewText.fontString:SetFont(fontPath, previewText.size, "")
+        previewText.fontString:SetFontObject(GetOrCreatePreviewFont(fontName, previewText.size))
     end
 end
 
@@ -89,7 +99,7 @@ previewTitle:SetText("Preview")
 
 -- Normal damage
 local previewNormal = settingsPanel:CreateFontString(nil, "OVERLAY")
-previewNormal:SetFont(ns.DEFAULT_FONT, 25, "")
+previewNormal:SetFontObject(GetOrCreatePreviewFont(nil, 25))
 previewNormal:SetPoint("LEFT", title, "LEFT", 0, 0)
 previewNormal:SetPoint("TOP", previewTitle, "BOTTOM", 0, -6)
 previewNormal:SetTextColor(1, 1, 1, 1)
@@ -98,7 +108,7 @@ table.insert(previewTexts, { fontString = previewNormal, size = 25 })
 
 -- Ability damage
 local previewAbility = settingsPanel:CreateFontString(nil, "OVERLAY")
-previewAbility:SetFont(ns.DEFAULT_FONT, 25, "")
+previewAbility:SetFontObject(GetOrCreatePreviewFont(nil, 25))
 previewAbility:SetPoint("LEFT", title, "LEFT", 0, 0)
 previewAbility:SetPoint("TOP", previewNormal, "BOTTOM", 0, -6)
 previewAbility:SetTextColor(1, 0.82, 0, 1)
@@ -107,7 +117,7 @@ table.insert(previewTexts, { fontString = previewAbility, size = 25 })
 
 -- Ability crit damage
 local previewAbilityCrit = settingsPanel:CreateFontString(nil, "OVERLAY")
-previewAbilityCrit:SetFont(ns.DEFAULT_FONT, 45, "")
+previewAbilityCrit:SetFontObject(GetOrCreatePreviewFont(nil, 45))
 previewAbilityCrit:SetPoint("LEFT", title, "LEFT", 0, 0)
 previewAbilityCrit:SetPoint("TOP", previewAbility, "BOTTOM", 0, -6)
 previewAbilityCrit:SetTextColor(1, 0.82, 0, 1)
@@ -116,7 +126,7 @@ table.insert(previewTexts, { fontString = previewAbilityCrit, size = 45 })
 
 -- Healing
 local previewHealing = settingsPanel:CreateFontString(nil, "OVERLAY")
-previewHealing:SetFont(ns.DEFAULT_FONT, 25, "")
+previewHealing:SetFontObject(GetOrCreatePreviewFont(nil, 25))
 previewHealing:SetPoint("LEFT", title, "LEFT", 0, 0)
 previewHealing:SetPoint("TOP", previewAbilityCrit, "BOTTOM", 0, -6)
 previewHealing:SetTextColor(0.10, 1, 0.10, 1)
@@ -125,7 +135,7 @@ table.insert(previewTexts, { fontString = previewHealing, size = 25 })
 
 -- Healing crit
 local previewHealingCrit = settingsPanel:CreateFontString(nil, "OVERLAY")
-previewHealingCrit:SetFont(ns.DEFAULT_FONT, 45, "")
+previewHealingCrit:SetFontObject(GetOrCreatePreviewFont(nil, 45))
 previewHealingCrit:SetPoint("LEFT", title, "LEFT", 0, 0)
 previewHealingCrit:SetPoint("TOP", previewHealing, "BOTTOM", 0, -6)
 previewHealingCrit:SetTextColor(0.10, 1, 0.10, 1)

@@ -3,7 +3,7 @@ local LSM = LibStub("LibSharedMedia-3.0")
 local settingsPanel = CreateFrame("Frame", "SimpleCombatFontSettingsPanel", UIParent)
 local addonVersion = C_AddOns.GetAddOnMetadata(addonName, "Version")
 
--- Preview texts table and update function to be called when a new drop-down value is selected
+-- Preview texts table and update function to be called at OnShow and when a new drop-down value is selected
 local previewTexts = {}
 
 local function UpdatePreviewFonts(fontName)

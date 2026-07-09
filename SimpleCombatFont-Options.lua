@@ -3,21 +3,6 @@ local LSM = LibStub("LibSharedMedia-3.0")
 local settingsPanel = CreateFrame("Frame", "SimpleCombatFontSettingsPanel", UIParent)
 local addonVersion = C_AddOns.GetAddOnMetadata(addonName, "Version")
 
--- Preview fonts table and helper function to use in dropdown and default dropdown value
-local previewFonts = {}
-
-local function GetOrCreatePreviewFont(fontName, size)
-    size = size or 12
-    local key = (fontName or "Default") .. ":" .. size
-    local previewFont = previewFonts[key]
-    if not previewFont then
-        previewFont = CreateFont("SimpleCombatFontPreview_" .. (fontName or "Default") .. "_" .. size)
-        previewFont:SetFont(LSM:Fetch("font", fontName, true) or ns.DEFAULT_FONT, size, "")
-        previewFonts[key] = previewFont
-    end
-    return previewFont
-end
-
 -- Preview texts table and update function to be called when a new drop-down value is selected
 local previewTexts = {}
 
@@ -27,7 +12,6 @@ local function UpdatePreviewFonts(fontName)
         previewText.fontString:SetFont(fontPath, previewText.size, "")
     end
 end
-
 
 -- Title
 local title = settingsPanel:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
@@ -50,7 +34,6 @@ settingsPanel:SetScript("OnShow", function()
     if ns.db.customFontName then
         UIDropDownMenu_SetSelectedValue(fontDropdown, ns.db.customFontName)
         UIDropDownMenu_SetText(fontDropdown, ns.db.customFontName)
-        fontDropdown.Text:SetFontObject(GetOrCreatePreviewFont(ns.db.customFontName))
     else
         UIDropDownMenu_SetText(fontDropdown, "Select a font")
     end
@@ -62,11 +45,9 @@ UIDropDownMenu_Initialize(fontDropdown, function(self, level)
         local info = UIDropDownMenu_CreateInfo()
         info.text = fontName
         info.value = fontName
-        info.fontObject = GetOrCreatePreviewFont(fontName)
 
         info.func = function(self)
             UIDropDownMenu_SetSelectedValue(fontDropdown, self.value)
-            fontDropdown.Text:SetFontObject(GetOrCreatePreviewFont(self.value))
             UpdatePreviewFonts(self.value)
         end
 
@@ -150,7 +131,6 @@ previewHealingCrit:SetPoint("TOP", previewHealing, "BOTTOM", 0, -6)
 previewHealingCrit:SetTextColor(0.10, 1, 0.10, 1)
 previewHealingCrit:SetText("3,456")
 table.insert(previewTexts, { fontString = previewHealingCrit, size = 45 })
-
 
 -- Register category
 local settingsCategory = Settings.RegisterCanvasLayoutCategory(settingsPanel, "Simple Combat Font")

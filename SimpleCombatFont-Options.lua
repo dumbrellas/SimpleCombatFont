@@ -3,19 +3,31 @@ local LSM = LibStub("LibSharedMedia-3.0")
 local settingsPanel = CreateFrame("Frame", "SimpleCombatFontSettingsPanel", UIParent)
 local addonVersion = C_AddOns.GetAddOnMetadata(addonName, "Version")
 
--- Preview fonts table and helper function to use in dropdown and default dropdown value
 local previewFonts = {}
-
-local function GetOrCreatePreviewFont(fontName)
-    local previewFont = previewFonts[fontName]
+local function GetOrCreatePreviewFont(fontName, size)
+    size = size or 12
+    local key = (fontName or "Default") .. ":" .. size
+    local previewFont = previewFonts[key]
     if not previewFont then
-        previewFont = CreateFont("SimpleCombatFontPreview_" .. fontName)
-        previewFont:SetFont(LSM:Fetch("font", fontName, true) or ns.DEFAULT_FONT, 12, "")
-        previewFonts[fontName] = previewFont
+        previewFont = CreateFont("SimpleCombatFontPreview_" .. (fontName or "Default") .. "_" .. size)
+        previewFont:SetFont(LSM:Fetch("font", fontName, true) or ns.DEFAULT_FONT, size, "")
+        previewFonts[key] = previewFont
     end
     return previewFont
 end
 
+local previewTexts = {}
+local function UpdatePreviewFonts(fontName)
+    for _, previewText in ipairs(previewTexts) do
+        previewText.fontString:SetFontObject(GetOrCreatePreviewFont(fontName, previewText.size))
+    end
+end
+
+local function SetPreviewShown(shown)
+    for _, previewText in ipairs(previewTexts) do
+        previewText.fontString:SetShown(shown)
+    end
+end
 
 -- Title
 local title = settingsPanel:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
@@ -38,10 +50,12 @@ settingsPanel:SetScript("OnShow", function()
     if ns.db.customFontName then
         UIDropDownMenu_SetSelectedValue(fontDropdown, ns.db.customFontName)
         UIDropDownMenu_SetText(fontDropdown, ns.db.customFontName)
-        fontDropdown.Text:SetFontObject(GetOrCreatePreviewFont(ns.db.customFontName))
+        SetPreviewShown(true)
     else
         UIDropDownMenu_SetText(fontDropdown, "Select a font")
+        SetPreviewShown(false)
     end
+    UpdatePreviewFonts(ns.db.customFontName)
 end)
 
 UIDropDownMenu_Initialize(fontDropdown, function(self, level)
@@ -49,13 +63,12 @@ UIDropDownMenu_Initialize(fontDropdown, function(self, level)
         local info = UIDropDownMenu_CreateInfo()
         info.text = fontName
         info.value = fontName
-        info.fontObject = GetOrCreatePreviewFont(fontName)
 
         info.func = function(self)
             UIDropDownMenu_SetSelectedValue(fontDropdown, self.value)
-            fontDropdown.Text:SetFontObject(GetOrCreatePreviewFont(self.value))
+            UpdatePreviewFonts(self.value)
+            SetPreviewShown(true)
         end
-
         UIDropDownMenu_AddButton(info)
     end
 end)
@@ -74,7 +87,7 @@ applyButton:SetScript("OnClick", function()
     ns.db.customFontName = selectedFont
     ns.db.customFontPath = LSM:Fetch("font", selectedFont, true) or ns.DEFAULT_FONT
 
-    print("|cFF00FF00SimpleCombatFont:|r |cFFFFD100" .. selectedFont .. "|r saved — log out and back in fully to apply it.")
+    print("|cFF00FF00[SimpleCombatFont]:|r |cFFFFD100" .. selectedFont .. "|r saved — log out and back in fully to apply it.")
 end)
 
 -- Relog notice
@@ -86,6 +99,57 @@ relogNotice:SetJustifyH("LEFT")
 relogNotice:SetText("After clicking Apply, you must fully log out to the character selection screen and log back in for the new font to take effect. \n\nReloading the UI (/reload) is not enough.")
 relogNotice:SetTextColor(1, 0.5, 0, 1)
 
+-- Preview
+local previewTitle = settingsPanel:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+previewTitle:SetPoint("LEFT", title, "LEFT", 0, 0)
+previewTitle:SetPoint("TOP", relogNotice, "BOTTOM", 0, -16)
+previewTitle:SetText("Preview")
+
+-- Normal damage
+local previewNormal = settingsPanel:CreateFontString(nil, "OVERLAY")
+previewNormal:SetFontObject(GetOrCreatePreviewFont(nil, 25))
+previewNormal:SetPoint("LEFT", title, "LEFT", 0, 0)
+previewNormal:SetPoint("TOP", previewTitle, "BOTTOM", 0, -6)
+previewNormal:SetTextColor(1, 1, 1, 1)
+previewNormal:SetText("1,234")
+table.insert(previewTexts, { fontString = previewNormal, size = 25 })
+
+-- Ability damage
+local previewAbility = settingsPanel:CreateFontString(nil, "OVERLAY")
+previewAbility:SetFontObject(GetOrCreatePreviewFont(nil, 25))
+previewAbility:SetPoint("LEFT", title, "LEFT", 0, 0)
+previewAbility:SetPoint("TOP", previewNormal, "BOTTOM", 0, -6)
+previewAbility:SetTextColor(1, 0.82, 0, 1)
+previewAbility:SetText("2,345")
+table.insert(previewTexts, { fontString = previewAbility, size = 25 })
+
+-- Ability crit damage
+local previewAbilityCrit = settingsPanel:CreateFontString(nil, "OVERLAY")
+previewAbilityCrit:SetFontObject(GetOrCreatePreviewFont(nil, 45))
+previewAbilityCrit:SetPoint("LEFT", title, "LEFT", 0, 0)
+previewAbilityCrit:SetPoint("TOP", previewAbility, "BOTTOM", 0, -6)
+previewAbilityCrit:SetTextColor(1, 0.82, 0, 1)
+previewAbilityCrit:SetText("4,567")
+table.insert(previewTexts, { fontString = previewAbilityCrit, size = 45 })
+
+-- Healing
+local previewHealing = settingsPanel:CreateFontString(nil, "OVERLAY")
+previewHealing:SetFontObject(GetOrCreatePreviewFont(nil, 25))
+previewHealing:SetPoint("LEFT", title, "LEFT", 0, 0)
+previewHealing:SetPoint("TOP", previewAbilityCrit, "BOTTOM", 0, -6)
+previewHealing:SetTextColor(0.10, 1, 0.10, 1)
+previewHealing:SetText("1,234")
+table.insert(previewTexts, { fontString = previewHealing, size = 25 })
+
+-- Healing crit
+local previewHealingCrit = settingsPanel:CreateFontString(nil, "OVERLAY")
+previewHealingCrit:SetFontObject(GetOrCreatePreviewFont(nil, 45))
+previewHealingCrit:SetPoint("LEFT", title, "LEFT", 0, 0)
+previewHealingCrit:SetPoint("TOP", previewHealing, "BOTTOM", 0, -6)
+previewHealingCrit:SetTextColor(0.10, 1, 0.10, 1)
+previewHealingCrit:SetText("3,456")
+table.insert(previewTexts, { fontString = previewHealingCrit, size = 45 })
+
 -- Register category
 local settingsCategory = Settings.RegisterCanvasLayoutCategory(settingsPanel, "Simple Combat Font")
 Settings.RegisterAddOnCategory(settingsCategory)
@@ -94,7 +158,7 @@ Settings.RegisterAddOnCategory(settingsCategory)
 SLASH_SIMPLECOMBATFONT1 = "/scf"
 SlashCmdList["SIMPLECOMBATFONT"] = function(msg)
     if InCombatLockdown() then
-        print("|cFF00FF00SimpleCombatFont:|r Cannot open settings while in combat.")
+        print("|cFF00FF00[SimpleCombatFont]:|r Cannot open settings while in combat.")
         return
     end
     Settings.OpenToCategory(settingsCategory.ID)

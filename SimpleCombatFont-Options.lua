@@ -23,6 +23,12 @@ local function UpdatePreviewFonts(fontName)
     end
 end
 
+local function SetPreviewShown(shown)
+    for _, previewText in ipairs(previewTexts) do
+        previewText.fontString:SetShown(shown)
+    end
+end
+
 -- Title
 local title = settingsPanel:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
 title:SetPoint("TOPLEFT", 16, -16)
@@ -44,8 +50,10 @@ settingsPanel:SetScript("OnShow", function()
     if ns.db.customFontName then
         UIDropDownMenu_SetSelectedValue(fontDropdown, ns.db.customFontName)
         UIDropDownMenu_SetText(fontDropdown, ns.db.customFontName)
+        SetPreviewShown(true)
     else
         UIDropDownMenu_SetText(fontDropdown, "Select a font")
+        SetPreviewShown(false)
     end
     UpdatePreviewFonts(ns.db.customFontName)
 end)
@@ -59,8 +67,8 @@ UIDropDownMenu_Initialize(fontDropdown, function(self, level)
         info.func = function(self)
             UIDropDownMenu_SetSelectedValue(fontDropdown, self.value)
             UpdatePreviewFonts(self.value)
+            SetPreviewShown(true)
         end
-
         UIDropDownMenu_AddButton(info)
     end
 end)

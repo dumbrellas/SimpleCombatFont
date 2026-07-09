@@ -87,7 +87,7 @@ applyButton:SetScript("OnClick", function()
     ns.db.customFontName = selectedFont
     ns.db.customFontPath = LSM:Fetch("font", selectedFont, true) or ns.DEFAULT_FONT
 
-    print("|cFF00FF00SimpleCombatFont:|r |cFFFFD100" .. selectedFont .. "|r saved — log out and back in fully to apply it.")
+    print("|cFF00FF00[SimpleCombatFont]:|r |cFFFFD100" .. selectedFont .. "|r saved — log out and back in fully to apply it.")
 end)
 
 -- Relog notice
@@ -158,7 +158,7 @@ Settings.RegisterAddOnCategory(settingsCategory)
 SLASH_SIMPLECOMBATFONT1 = "/scf"
 SlashCmdList["SIMPLECOMBATFONT"] = function(msg)
     if InCombatLockdown() then
-        print("|cFF00FF00SimpleCombatFont:|r Cannot open settings while in combat.")
+        print("|cFF00FF00[SimpleCombatFont]:|r Cannot open settings while in combat.")
         return
     end
     Settings.OpenToCategory(settingsCategory.ID)

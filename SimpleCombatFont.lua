@@ -16,7 +16,7 @@ frame:SetScript("OnEvent", function(self, event, loadedAddon)
         elseif C_UIFileAsset.IsLooseFile(ns.db.customFontPath) or C_UIFileAsset.IsKnownFile(ns.db.customFontPath) then
             DAMAGE_TEXT_FONT = ns.db.customFontPath
         else
-            print("|cFF00FF00SimpleCombatFont:|r |cFFFFD100" .. ns.db.customFontName .. "|r was not found. Please select a different font in SCF settings.")
+            print("|cFF00FF00[SimpleCombatFont]:|r |cFFFFD100" .. ns.db.customFontName .. "|r was not found. Please select a different font in SCF settings.")
             DAMAGE_TEXT_FONT = ns.DEFAULT_FONT
         end      
         self:UnregisterEvent("ADDON_LOADED")

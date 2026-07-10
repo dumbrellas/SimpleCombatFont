@@ -1,8 +1,9 @@
 local addonName, ns = ...
+local addonVersion = C_AddOns.GetAddOnMetadata(addonName, "Version")
 local LSM = LibStub("LibSharedMedia-3.0")
 local settingsPanel = CreateFrame("Frame", "SimpleCombatFontSettingsPanel", UIParent)
-local addonVersion = C_AddOns.GetAddOnMetadata(addonName, "Version")
 
+-- Function to get or create a session-cached preview font object (keyed by name+size). Table discarded each fresh login or /reload and re-populated as needed.
 local previewFonts = {}
 local function GetOrCreatePreviewFont(fontName, size)
     size = size or 12
@@ -16,6 +17,7 @@ local function GetOrCreatePreviewFont(fontName, size)
     return previewFont
 end
 
+-- Functions to restyle and show/hide the preview texts
 local previewTexts = {}
 local function UpdatePreviewFonts(fontName)
     for _, previewText in ipairs(previewTexts) do
@@ -28,6 +30,16 @@ local function SetPreviewShown(shown)
         previewText.fontString:SetShown(shown)
     end
 end
+
+-- Floating Combat Text toggles
+local toggleChecks = {}
+local combatTextToggles = {
+    { cvar = "floatingCombatTextCombatDamage_v2",            label = "Show damage" },
+    { cvar = "floatingCombatTextCombatLogPeriodicSpells_v2", label = "Show periodic (DoT/HoT) damage" },
+    { cvar = "floatingCombatTextPetMeleeDamage_v2",          label = "Show pet melee damage" },
+    { cvar = "floatingCombatTextPetSpellDamage_v2",          label = "Show pet spell damage" },
+    { cvar = "floatingCombatTextCombatHealing_v2",           label = "Show healing" },
+}
 
 -- Title
 local title = settingsPanel:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
@@ -56,6 +68,9 @@ settingsPanel:SetScript("OnShow", function()
         SetPreviewShown(false)
     end
     UpdatePreviewFonts(ns.db.customFontName)
+    for _, check in ipairs(toggleChecks) do
+        check:SetChecked(GetCVarBool(check.cvar))
+    end
 end)
 
 UIDropDownMenu_Initialize(fontDropdown, function(self, level)
@@ -94,9 +109,9 @@ end)
 local relogNotice = settingsPanel:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 relogNotice:SetPoint("LEFT", title, "LEFT", 0, 0)
 relogNotice:SetPoint("TOP", applyButton, "BOTTOM", 0, -16)
-relogNotice:SetWidth(500)
+relogNotice:SetWidth(300)
 relogNotice:SetJustifyH("LEFT")
-relogNotice:SetText("After clicking Apply, you must fully log out to the character selection screen and log back in for the new font to take effect. \n\nReloading the UI (/reload) is not enough.")
+relogNotice:SetText("After clicking Apply, you must fully log out to the character selection screen and log back in for the new font to take effect.\n \nReloading the UI (/reload) is not enough.")
 relogNotice:SetTextColor(1, 0.5, 0, 1)
 
 -- Preview
@@ -108,7 +123,7 @@ previewTitle:SetText("Preview")
 -- Normal damage
 local previewNormal = settingsPanel:CreateFontString(nil, "OVERLAY")
 previewNormal:SetFontObject(GetOrCreatePreviewFont(nil, 25))
-previewNormal:SetPoint("LEFT", title, "LEFT", 0, 0)
+previewNormal:SetPoint("LEFT", previewTitle, "LEFT", 0, 0)
 previewNormal:SetPoint("TOP", previewTitle, "BOTTOM", 0, -6)
 previewNormal:SetTextColor(1, 1, 1, 1)
 previewNormal:SetText("1,234")
@@ -117,7 +132,7 @@ table.insert(previewTexts, { fontString = previewNormal, size = 25 })
 -- Ability damage
 local previewAbility = settingsPanel:CreateFontString(nil, "OVERLAY")
 previewAbility:SetFontObject(GetOrCreatePreviewFont(nil, 25))
-previewAbility:SetPoint("LEFT", title, "LEFT", 0, 0)
+previewAbility:SetPoint("LEFT", previewTitle, "LEFT", 0, 0)
 previewAbility:SetPoint("TOP", previewNormal, "BOTTOM", 0, -6)
 previewAbility:SetTextColor(1, 0.82, 0, 1)
 previewAbility:SetText("2,345")
@@ -126,7 +141,7 @@ table.insert(previewTexts, { fontString = previewAbility, size = 25 })
 -- Ability crit damage
 local previewAbilityCrit = settingsPanel:CreateFontString(nil, "OVERLAY")
 previewAbilityCrit:SetFontObject(GetOrCreatePreviewFont(nil, 45))
-previewAbilityCrit:SetPoint("LEFT", title, "LEFT", 0, 0)
+previewAbilityCrit:SetPoint("LEFT", previewTitle, "LEFT", 0, 0)
 previewAbilityCrit:SetPoint("TOP", previewAbility, "BOTTOM", 0, -6)
 previewAbilityCrit:SetTextColor(1, 0.82, 0, 1)
 previewAbilityCrit:SetText("4,567")
@@ -135,7 +150,7 @@ table.insert(previewTexts, { fontString = previewAbilityCrit, size = 45 })
 -- Healing
 local previewHealing = settingsPanel:CreateFontString(nil, "OVERLAY")
 previewHealing:SetFontObject(GetOrCreatePreviewFont(nil, 25))
-previewHealing:SetPoint("LEFT", title, "LEFT", 0, 0)
+previewHealing:SetPoint("LEFT", previewTitle, "LEFT", 0, 0)
 previewHealing:SetPoint("TOP", previewAbilityCrit, "BOTTOM", 0, -6)
 previewHealing:SetTextColor(0.10, 1, 0.10, 1)
 previewHealing:SetText("1,234")
@@ -144,11 +159,30 @@ table.insert(previewTexts, { fontString = previewHealing, size = 25 })
 -- Healing crit
 local previewHealingCrit = settingsPanel:CreateFontString(nil, "OVERLAY")
 previewHealingCrit:SetFontObject(GetOrCreatePreviewFont(nil, 45))
-previewHealingCrit:SetPoint("LEFT", title, "LEFT", 0, 0)
+previewHealingCrit:SetPoint("LEFT", previewTitle, "LEFT", 0, 0)
 previewHealingCrit:SetPoint("TOP", previewHealing, "BOTTOM", 0, -6)
 previewHealingCrit:SetTextColor(0.10, 1, 0.10, 1)
 previewHealingCrit:SetText("3,456")
 table.insert(previewTexts, { fontString = previewHealingCrit, size = 45 })
+
+-- Combat text toggles
+local cvarsTitle = settingsPanel:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+cvarsTitle:SetPoint("LEFT", title, "LEFT", 300, 0)
+cvarsTitle:SetPoint("TOP", relogNotice, "BOTTOM", 0, -16)
+cvarsTitle:SetText("Floating Combat Text CVARs (Now account-wide in Midnight)")
+
+local previousAnchor = cvarsTitle
+for i, toggle in ipairs(combatTextToggles) do
+    local check = CreateFrame("CheckButton", "SimpleCombatFontToggle" .. i, settingsPanel, "UICheckButtonTemplate")
+    check:SetPoint("TOPLEFT", previousAnchor, "BOTTOMLEFT", 0, -6)
+    check.Text:SetText(toggle.label)
+    check.cvar = toggle.cvar
+    check:SetScript("OnClick", function(self)
+        SetCVar(self.cvar, self:GetChecked() and "1" or "0")
+    end)
+    toggleChecks[i] = check
+    previousAnchor = check
+end
 
 -- Register category
 local settingsCategory = Settings.RegisterCanvasLayoutCategory(settingsPanel, "Simple Combat Font")

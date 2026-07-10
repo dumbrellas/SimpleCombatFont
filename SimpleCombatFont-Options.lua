@@ -2,8 +2,8 @@ local addonName, ns = ...
 local addonVersion = C_AddOns.GetAddOnMetadata(addonName, "Version")
 local LSM = LibStub("LibSharedMedia-3.0")
 local settingsPanel = CreateFrame("Frame", "SimpleCombatFontSettingsPanel", UIParent)
-local damageCheck, healingCheck
 
+-- Function to get or create a session-cached preview font object (keyed by name+size). Table discarded each fresh login or /reload and re-populated as needed.
 local previewFonts = {}
 local function GetOrCreatePreviewFont(fontName, size)
     size = size or 12
@@ -17,6 +17,7 @@ local function GetOrCreatePreviewFont(fontName, size)
     return previewFont
 end
 
+-- Functions to restyle and show/hide the preview texts
 local previewTexts = {}
 local function UpdatePreviewFonts(fontName)
     for _, previewText in ipairs(previewTexts) do
@@ -29,6 +30,16 @@ local function SetPreviewShown(shown)
         previewText.fontString:SetShown(shown)
     end
 end
+
+-- Floating Combat Text toggles
+local toggleChecks = {}
+local combatTextToggles = {
+    { cvar = "floatingCombatTextCombatDamage_v2",            label = "Show damage" },
+    { cvar = "floatingCombatTextCombatLogPeriodicSpells_v2", label = "Show periodic (DoT/HoT) damage" },
+    { cvar = "floatingCombatTextPetMeleeDamage_v2",          label = "Show pet melee damage" },
+    { cvar = "floatingCombatTextPetSpellDamage_v2",          label = "Show pet spell damage" },
+    { cvar = "floatingCombatTextCombatHealing_v2",           label = "Show healing" },
+}
 
 -- Title
 local title = settingsPanel:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
@@ -57,8 +68,9 @@ settingsPanel:SetScript("OnShow", function()
         SetPreviewShown(false)
     end
     UpdatePreviewFonts(ns.db.customFontName)
-    damageCheck:SetChecked(GetCVarBool("floatingCombatTextCombatDamage_v2"))
-    healingCheck:SetChecked(GetCVarBool("floatingCombatTextCombatHealing_v2"))
+    for _, check in ipairs(toggleChecks) do
+        check:SetChecked(GetCVarBool(check.cvar))
+    end
 end)
 
 UIDropDownMenu_Initialize(fontDropdown, function(self, level)
@@ -154,21 +166,23 @@ previewHealingCrit:SetText("3,456")
 table.insert(previewTexts, { fontString = previewHealingCrit, size = 45 })
 
 -- Combat text toggles
-damageCheck = CreateFrame("CheckButton", "SimpleCombatFontDamageCheck", settingsPanel, "UICheckButtonTemplate")
-damageCheck:SetPoint("TOPLEFT", previewHealingCrit, "BOTTOMLEFT", 0, -24)
-damageCheck.Text:SetText("Show damage combat text")
+local cvarsTitle = settingsPanel:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+cvarsTitle:SetPoint("LEFT", title, "LEFT", 0, 0)
+cvarsTitle:SetPoint("TOP", previewHealingCrit, "BOTTOM", 0, -16)
+cvarsTitle:SetText("Floating Combat Text CVARs - Now account-wide in Midnight")
 
-healingCheck = CreateFrame("CheckButton", "SimpleCombatFontHealingCheck", settingsPanel, "UICheckButtonTemplate")
-healingCheck:SetPoint("TOPLEFT", damageCheck, "BOTTOMLEFT", 0, -8)
-healingCheck.Text:SetText("Show healing combat text")
-
-damageCheck:SetScript("OnClick", function(self)
-    SetCVar("floatingCombatTextCombatDamage_v2", self:GetChecked() and "1" or "0")
-end)
-
-healingCheck:SetScript("OnClick", function(self)
-    SetCVar("floatingCombatTextCombatHealing_v2", self:GetChecked() and "1" or "0")
-end)
+local previousAnchor = cvarsTitle
+for i, toggle in ipairs(combatTextToggles) do
+    local check = CreateFrame("CheckButton", "SimpleCombatFontToggle" .. i, settingsPanel, "UICheckButtonTemplate")
+    check:SetPoint("TOPLEFT", previousAnchor, "BOTTOMLEFT", 0, i == 1 and -24 or -8)
+    check.Text:SetText(toggle.label)
+    check.cvar = toggle.cvar
+    check:SetScript("OnClick", function(self)
+        SetCVar(self.cvar, self:GetChecked() and "1" or "0")
+    end)
+    toggleChecks[i] = check
+    previousAnchor = check
+end
 
 -- Register category
 local settingsCategory = Settings.RegisterCanvasLayoutCategory(settingsPanel, "Simple Combat Font")

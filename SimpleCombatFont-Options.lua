@@ -1,7 +1,8 @@
 local addonName, ns = ...
+local addonVersion = C_AddOns.GetAddOnMetadata(addonName, "Version")
 local LSM = LibStub("LibSharedMedia-3.0")
 local settingsPanel = CreateFrame("Frame", "SimpleCombatFontSettingsPanel", UIParent)
-local addonVersion = C_AddOns.GetAddOnMetadata(addonName, "Version")
+local damageCheck, healingCheck
 
 local previewFonts = {}
 local function GetOrCreatePreviewFont(fontName, size)
@@ -56,6 +57,8 @@ settingsPanel:SetScript("OnShow", function()
         SetPreviewShown(false)
     end
     UpdatePreviewFonts(ns.db.customFontName)
+    damageCheck:SetChecked(GetCVarBool("floatingCombatTextCombatDamage_v2"))
+    healingCheck:SetChecked(GetCVarBool("floatingCombatTextCombatHealing_v2"))
 end)
 
 UIDropDownMenu_Initialize(fontDropdown, function(self, level)
@@ -149,6 +152,23 @@ previewHealingCrit:SetPoint("TOP", previewHealing, "BOTTOM", 0, -6)
 previewHealingCrit:SetTextColor(0.10, 1, 0.10, 1)
 previewHealingCrit:SetText("3,456")
 table.insert(previewTexts, { fontString = previewHealingCrit, size = 45 })
+
+-- Combat text toggles
+damageCheck = CreateFrame("CheckButton", "SimpleCombatFontDamageCheck", settingsPanel, "UICheckButtonTemplate")
+damageCheck:SetPoint("TOPLEFT", previewHealingCrit, "BOTTOMLEFT", 0, -24)
+damageCheck.Text:SetText("Show damage combat text")
+
+healingCheck = CreateFrame("CheckButton", "SimpleCombatFontHealingCheck", settingsPanel, "UICheckButtonTemplate")
+healingCheck:SetPoint("TOPLEFT", damageCheck, "BOTTOMLEFT", 0, -8)
+healingCheck.Text:SetText("Show healing combat text")
+
+damageCheck:SetScript("OnClick", function(self)
+    SetCVar("floatingCombatTextCombatDamage_v2", self:GetChecked() and "1" or "0")
+end)
+
+healingCheck:SetScript("OnClick", function(self)
+    SetCVar("floatingCombatTextCombatHealing_v2", self:GetChecked() and "1" or "0")
+end)
 
 -- Register category
 local settingsCategory = Settings.RegisterCanvasLayoutCategory(settingsPanel, "Simple Combat Font")

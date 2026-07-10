@@ -109,9 +109,9 @@ end)
 local relogNotice = settingsPanel:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 relogNotice:SetPoint("LEFT", title, "LEFT", 0, 0)
 relogNotice:SetPoint("TOP", applyButton, "BOTTOM", 0, -16)
-relogNotice:SetWidth(500)
+relogNotice:SetWidth(300)
 relogNotice:SetJustifyH("LEFT")
-relogNotice:SetText("After clicking Apply, you must fully log out to the character selection screen and log back in for the new font to take effect. \n\nReloading the UI (/reload) is not enough.")
+relogNotice:SetText("After clicking Apply, you must fully log out to the character selection screen and log back in for the new font to take effect.\n \nReloading the UI (/reload) is not enough.")
 relogNotice:SetTextColor(1, 0.5, 0, 1)
 
 -- Preview

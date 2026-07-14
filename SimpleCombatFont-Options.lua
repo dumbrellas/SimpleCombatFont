@@ -49,7 +49,7 @@ title:SetText("Simple Combat Font")
 -- Subtitle
 local subtitle = settingsPanel:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 subtitle:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -8)
-subtitle:SetText("Author: Fugazi\nVersion: " .. addonVersion .. "\n\nCustomize your floating combat text font.")
+subtitle:SetText("Author: Dumbrellas\nVersion: " .. addonVersion .. "\n\nCustomize your floating combat text font.")
 subtitle:SetJustifyH("LEFT")
 
 -- Dropdown menu

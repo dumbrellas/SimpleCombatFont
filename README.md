@@ -4,7 +4,7 @@
 Swaps your floating combat text to the font of your choice.  
 
 This addon does **not** change the _behaviour_ of the floating combat text.  
-__It only changes the font__.
+__It only changes the font. It cannot change the position, scroll direction, etc.__
 
 Currently supports:
 - Blizzard default fonts
@@ -12,7 +12,7 @@ Currently supports:
 - If you use [Shared Media](https://www.curseforge.com/wow/addons/sharedmedia), those fonts will already be available
 
 ## Installation
-Extract SimpleCombatFont folder to `Interface\Addons\` folder
+Extract SimpleCombatFont folder to `Interface\AddOns\` folder
 
 ## Usage
 1. Use `/scf` or open the Simple Combat Font panel in Game Menu > Options > Addons

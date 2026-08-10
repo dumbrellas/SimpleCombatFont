@@ -27,3 +27,5 @@ Extract SimpleCombatFont folder to `Interface\AddOns\` folder
 Your selection will be saved and applied each login (account-wide). You only need to log out and log in when changing the font in the settings panel.
 
 Due to the way WoW handles 3D font changes, you **must** log out to the character select screen, and log back in to apply this font change.
+
+I'm punting on adding a custom font system. I don't want to bog this addon down too much. Most players are already using addons that are registering many custom font options. If you'd like to include a font of your own, please use [SharedMedia](https://www.curseforge.com/wow/addons/sharedmedia) to get your custom font registered. My addon will pick it up.

@@ -8,7 +8,8 @@ __It only changes the font__.
 
 Currently supports:
 - Blizzard default fonts
-- LibSharedMedia fonts (fonts registered from other addons)
+- LibSharedMedia fonts (fonts registered by other addons such as ElvUI, EQOL, BetterBlizzPlates, etc)
+- If you use [Shared Media](https://www.curseforge.com/wow/addons/sharedmedia), those fonts will already be available
 
 <small>Coming soon: use your own custom font</small>
 
@@ -27,10 +28,4 @@ Extract SimpleCombatFont folder to `Interface\Addons\` folder
 ## Note
 Your selection will be saved and applied each login (account-wide). You only need to log out and log in when changing the font in the settings panel.
 
-Due to the way WoW handles 3D font changes, you **must** log out to the character select screen, and log back in to apply this font change.  
-
-## Planned
-- [x] ~~Select from available LibSharedMedia fonts~~
-- [ ] Use custom font via manual path
-
-That's it, pretty simple
+Due to the way WoW handles 3D font changes, you **must** log out to the character select screen, and log back in to apply this font change.

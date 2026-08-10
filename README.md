@@ -28,4 +28,4 @@ Your selection will be saved and applied each login (account-wide). You only nee
 
 Due to the way WoW handles 3D font changes, you **must** log out to the character select screen, and log back in to apply this font change.
 
-I'm punting on adding a custom font system. I don't want to bog this addon down too much. Most players are already using addons that are registering many custom font options. If you'd like to include a font of your own, please use [SharedMedia](https://www.curseforge.com/wow/addons/sharedmedia) to get your custom font registered. My addon will pick it up.
+I'm punting on adding a custom font system. I don't want to bog this addon down too much. Most players are already using addons that are registering many custom font options. If you'd like to include a font of your own, please use [SharedMedia](https://www.curseforge.com/wow/addons/sharedmedia) to get your custom font registered using the `SharedMedia_MyMedia` folder (Follow the instructions for SharedMedia to properly register them). My addon will then pick it up.

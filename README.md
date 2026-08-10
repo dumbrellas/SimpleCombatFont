@@ -11,8 +11,6 @@ Currently supports:
 - LibSharedMedia fonts (fonts registered by other addons such as ElvUI, EQOL, BetterBlizzPlates, etc)
 - If you use [Shared Media](https://www.curseforge.com/wow/addons/sharedmedia), those fonts will already be available
 
-<small>Coming soon: use your own custom font</small>
-
 ## Installation
 Extract SimpleCombatFont folder to `Interface\Addons\` folder
 
